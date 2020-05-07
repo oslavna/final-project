@@ -1,25 +1,31 @@
 package pages;
 
 import helpers.BaseHooks;
-import org.junit.Test;
+
+import helpers.DatesHelper;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.awt.*;
 import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
 
 public class EventsPage extends BasePage {
 
     String pageUrl = baseUrl + "/events";
+    private static final Logger logger = LogManager.getLogger(EventsPage.class);
+
 
     @FindBy(css = ".active .white")
     protected WebElement upcomingEventsCounter;
@@ -36,7 +42,7 @@ public class EventsPage extends BasePage {
     @FindBy(css = ".size-m .evnt-card-wrapper")
     protected WebElement upcomingEventsCard;
 
-    @FindBy(css = ".lavender .evnt-card-wrapper")
+    @FindBy(css = ".size-m .evnt-card-wrapper")
     protected List<WebElement> eventList;
 
     @FindBy(css =".evnt-events-tabs-container.tab-content :nth-last-child(n+1)")
@@ -45,14 +51,25 @@ public class EventsPage extends BasePage {
     @FindBy(css=".evnt-cards-container:nth-child(1) .date")
     protected List<WebElement> datesOfThisWeek;
 
+
+    @FindBy(xpath = "//h3[contains(text(),'This week')]")
+    protected WebElement thisWeekSection;
+
     @FindBy(css=".nav-item+ .nav-item .desktop")
     protected WebElement pastEventsButton;
 
+    @FindBy(xpath="//span[@class='evnt-tab-text desktop']")
+    protected WebElement upcomingEventsButton;
 
 
-//    public WebElement getUpcomingEventsCounter() {
-//        return upcomingEventsCounter;
-//    }
+    public boolean upcomingEventsCardIsPresent() {
+        return upcomingEventsCard.isDisplayed();
+    }
+
+    public void clickUpcomingEventsButton(){
+        upcomingEventsButton.click();
+    }
+
 
     public List<WebElement> getEventList(){
         return eventList;
@@ -62,14 +79,28 @@ public class EventsPage extends BasePage {
         return cardInfoList;
     }
 
-    public List<Date> getDatesOfUpcomingeventsThisWeek() throws ParseException {
-        ArrayList<Date>  list = new ArrayList<>();
+
+    public List<String> getDatesOfUpcomingeventsThisWeek() throws ParseException {
+        ArrayList<String>  list = new ArrayList<>();
         for (WebElement webElement : datesOfThisWeek){
             String relText = webElement.getText();
-            list.add(datesHelper.convertToDate(relText));
+            list.add(relText);
             System.out.println(relText);
         }
         return list;
+    }
+
+    public boolean checkDateOnValidity(String textDate) throws ParseException {
+        return datesHelper.checkDate(textDate);
+    }
+
+    public boolean thisWeekSectionIsPresent() {
+        try {
+            return thisWeekSection.isDisplayed();
+        } catch (NoSuchElementException e) {
+            logger.error(" No events this week");
+            return false;
+        }
     }
 
     public List<String> listOfValue(){
@@ -83,16 +114,21 @@ public class EventsPage extends BasePage {
     }
 
 
+
     public int getNumberOfUpcomingEventsOnPage(){
-       return getEventList().size();
+        logger.info("Event cards list size  is " + getEventList().size());
+        return getEventList().size();
     }
 
     public void openEventsPage(){
         BaseHooks.getDriver().get(pageUrl);
     }
 
-    public String getNumOfUpcomingEventsFromCounter(){
-        return upcomingEventsCounter.getText();
+    public int getNumOfUpcomingEventsFromCounter(){
+        int num = Integer.parseInt(upcomingEventsCounter.getText());
+        logger.info("Events number in counter equal " + num);
+        return num;
+
     }
 
 
