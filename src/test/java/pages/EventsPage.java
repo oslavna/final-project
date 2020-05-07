@@ -24,6 +24,18 @@ public class EventsPage extends BasePage {
     @FindBy(css = ".active .white")
     protected WebElement upcomingEventsCounter;
 
+    @FindBy(css = ".nav-item+ .nav-item .white")
+    protected WebElement pastEventsCounter;
+
+    @FindBy(xpath = "//div[@id='filter_location']//span[@class='evnt-filter-text']")
+    protected WebElement filterLocation;
+
+    @FindBy(xpath = "//div[@class='evnt-dropdown-filter dropdown show']//div[4]//div[1]//div[2]//label[1]")
+    protected WebElement checkboxCanada;
+
+    @FindBy(css = ".size-m .evnt-card-wrapper")
+    protected WebElement upcomingEventsCard;
+
     @FindBy(css = ".lavender .evnt-card-wrapper")
     protected List<WebElement> eventList;
 
@@ -33,17 +45,19 @@ public class EventsPage extends BasePage {
     @FindBy(css=".evnt-cards-container:nth-child(1) .date")
     protected List<WebElement> datesOfThisWeek;
 
+    @FindBy(css=".nav-item+ .nav-item .desktop")
+    protected WebElement pastEventsButton;
+
 
 
 //    public WebElement getUpcomingEventsCounter() {
 //        return upcomingEventsCounter;
 //    }
 
-
-
     public List<WebElement> getEventList(){
         return eventList;
     }
+
     public List<WebElement> getCardInfo(){
         return cardInfoList;
     }
