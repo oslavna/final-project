@@ -2,29 +2,21 @@ package pages;
 
 import helpers.BaseHooks;
 
-import helpers.DatesHelper;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-import java.awt.*;
-import java.lang.reflect.Array;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
-public class EventsPage extends BasePage {
+public class AllEventsPage extends BasePage {
 
     String pageUrl = baseUrl + "/events";
-    private static final Logger logger = LogManager.getLogger(EventsPage.class);
+    private static final Logger logger = LogManager.getLogger(AllEventsPage.class);
 
 
     @FindBy(css = ".active .white")
@@ -62,13 +54,41 @@ public class EventsPage extends BasePage {
     protected WebElement upcomingEventsButton;
 
 
+
+
+
     public boolean upcomingEventsCardIsPresent() {
         return upcomingEventsCard.isDisplayed();
     }
 
+
+
     public void clickUpcomingEventsButton(){
         upcomingEventsButton.click();
     }
+
+    public void clickEventsCard(){
+        upcomingEventsCard.click();
+    }
+
+    public void clickPastEventsButton(){
+        pastEventsButton.click();
+    }
+
+    public void openLocationFilters(){
+        filterLocation.click();
+    }
+
+    public WebElement getUpcomingEventsCard(){
+        return upcomingEventsCard;
+   }
+
+    public void chooseCanadaInList() throws InterruptedException {
+        checkboxCanada.click();
+        //BaseHooks.getWait().until(ExpectedConditions.invisibilityOf(eventCard));
+    }
+
+
 
 
     public List<WebElement> getEventList(){
@@ -130,6 +150,8 @@ public class EventsPage extends BasePage {
         return num;
 
     }
+
+
 
 
 }

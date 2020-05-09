@@ -2,12 +2,9 @@ package tests;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 import pages.*;
-import helpers.*;
 
 import helpers.BaseHooks;
 
@@ -19,16 +16,17 @@ public class EventsTests extends BaseHooks {
 
     private static final Logger logger = LogManager.getLogger(EventsTests.class);
     MainPage mainPage = new MainPage();
-    EventsPage eventsPage = new EventsPage();
+    AllEventsPage allEventsPage = new AllEventsPage();
+    EventInfoPage eventInfoPage = new EventInfoPage();
 
 
     @Test
     public void checkOfUpcomingEventsCounter() {
         mainPage.openEventsPage();
-        eventsPage.clickUpcomingEventsButton();
-        if (eventsPage.upcomingEventsCardIsPresent())
-            Assertions.assertEquals(eventsPage.getNumberOfUpcomingEventsOnPage(),
-                    eventsPage.getNumOfUpcomingEventsFromCounter(),
+        allEventsPage.clickUpcomingEventsButton();
+        if (allEventsPage.upcomingEventsCardIsPresent())
+            Assertions.assertEquals(allEventsPage.getNumberOfUpcomingEventsOnPage(),
+                    allEventsPage.getNumOfUpcomingEventsFromCounter(),
                     "Numbers of events from page and from counter do not match!");
         else logger.info(" No cards in upcoming events");
     }
@@ -36,13 +34,44 @@ public class EventsTests extends BaseHooks {
     @Test
     public void checkValidityDatesOfEventsOnThisWeek() throws ParseException {
         mainPage.openEventsPage();
-        eventsPage.clickUpcomingEventsButton();
-        if (eventsPage.thisWeekSectionIsPresent())
-        for (String date : eventsPage.getDatesOfUpcomingeventsThisWeek()) {
-            Assertions.assertTrue(eventsPage.checkDateOnValidity(date),
-                    "Date is not valid");
+        allEventsPage.clickUpcomingEventsButton();
+        if (allEventsPage.thisWeekSectionIsPresent())
+            for (String date : allEventsPage.getDatesOfUpcomingeventsThisWeek()) {
+                Assertions.assertTrue(allEventsPage.checkDateOnValidity(date),
+                        "Date is not valid");
             }
-        }
     }
+
+
+    @Test
+    public void checkCanadaEvents() throws InterruptedException {
+        mainPage.openEventsPage();
+        allEventsPage.clickPastEventsButton();
+        allEventsPage.openLocationFilters();
+        allEventsPage.chooseCanadaInList();
+        allEventsPage.openLocationFilters();
+        if (allEventsPage.upcomingEventsCardIsPresent())
+            Assertions.assertEquals(allEventsPage.getNumberOfUpcomingEventsOnPage(),
+                    allEventsPage.getNumOfUpcomingEventsFromCounter(),
+                    "Numbers of events from page and from counter do not match!");
+        else logger.info(" No cards in upcoming events");
+    }
+
+    @Test
+    public void checkOpeningEventCard(){
+        mainPage.openEventsPage();
+        allEventsPage.clickUpcomingEventsButton();
+        allEventsPage.clickEventsCard();
+        eventInfoPage.agendaIsPresent();
+        eventInfoPage.attendButtonIsPresent();
+        eventInfoPage.dateIsPresent();
+        eventInfoPage.headerIsPresent();
+        eventInfoPage.onlineIsPresent();
+    }
+
+
+}
+
+
 
 
