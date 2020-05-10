@@ -32,8 +32,9 @@ public class BaseHooks {
         return wait;
     }
 
-
-
+    public static String getCurrentUrl() {
+        return driver.getCurrentUrl();
+    }
 
     public static WebDriver getDriver() {
         return driver;

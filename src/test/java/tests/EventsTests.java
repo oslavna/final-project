@@ -18,6 +18,8 @@ public class EventsTests extends BaseHooks {
     MainPage mainPage = new MainPage();
     AllEventsPage allEventsPage = new AllEventsPage();
     EventInfoPage eventInfoPage = new EventInfoPage();
+    TalksLibrary talksLibrary = new TalksLibrary();
+    TalksLibraryInfoPage talksLibraryInfoPage = new TalksLibraryInfoPage();
 
 
     @Test
@@ -57,6 +59,9 @@ public class EventsTests extends BaseHooks {
         else logger.info(" No cards in upcoming events");
     }
 
+//    TO DO HERE
+//    make Canada as parameter of method
+
     @Test
     public void checkOpeningEventCard(){
         mainPage.openEventsPage();
@@ -67,7 +72,36 @@ public class EventsTests extends BaseHooks {
         eventInfoPage.dateIsPresent();
         eventInfoPage.headerIsPresent();
         eventInfoPage.onlineIsPresent();
+
     }
+    //TO DO here
+    //переделать этот тест, добавить проверки
+
+
+    @Test
+    public void checkFilters() {
+        mainPage.openTalksLibPage();
+        talksLibrary.chooseInFilterCategory("Design");
+        talksLibrary.openMoreFilters().
+                chooseInFilterLocation("Belarus").
+                chooseInFilterLanguage("ENGLISH")
+                .waitForFiltersApply("Eng");
+        talksLibrary.openAnyTalksLibraryCard();
+        talksLibraryInfoPage.logCurrentUrl();
+        talksLibraryInfoPage.getLanguage();
+        Assertions.assertTrue(talksLibraryInfoPage.getLanguage().contains("ENGLISH"));
+        Assertions.assertTrue(talksLibraryInfoPage.getLocation().contains("Belarus"));
+        Assertions.assertTrue(talksLibraryInfoPage.getCategories().contains("Design"));
+
+//        TO DO here:
+//        change checks for all cards
+//        log info in checks
+//        improve asserts (as error collector )
+
+
+    }
+
+
 
 
 }
