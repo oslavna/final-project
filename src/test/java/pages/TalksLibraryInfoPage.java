@@ -22,6 +22,8 @@ public class TalksLibraryInfoPage extends BasePage {
     protected WebElement language;
 
 
+
+
     public void logCurrentUrl() {
         logger.info("Current url is " + BaseHooks.getCurrentUrl());
     }

@@ -63,7 +63,7 @@ public class EventsTests extends BaseHooks {
 //    make Canada as parameter of method
 
     @Test
-    public void checkOpeningEventCard(){
+    public void checkOpeningEventCard() {
         mainPage.openEventsPage();
         allEventsPage.clickUpcomingEventsButton();
         allEventsPage.clickEventsCard();
@@ -98,10 +98,19 @@ public class EventsTests extends BaseHooks {
 //        log info in checks
 //        improve asserts (as error collector )
 
-
     }
 
-
+    @Test
+    public void searchForKeyword(){
+        mainPage.openTalksLibPage();
+        talksLibrary.enterInSearchField("Azure");
+        talksLibrary.getTalksHeaders();
+        for(String talk : talksLibrary.getTalksHeaders()){
+            Assertions.assertTrue(talk.contains("Azure"));
+        }
+    }
+//        TO DO HERE:
+//    add exception for case whe cards are not found
 
 
 }

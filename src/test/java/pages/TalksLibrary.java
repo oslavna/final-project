@@ -11,6 +11,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TalksLibrary extends BasePage {
 
     private static final Logger logger = LogManager.getLogger();
@@ -44,6 +47,13 @@ public class TalksLibrary extends BasePage {
 
     @FindBy(xpath = "//div[@class='evnt-global-loader']")
     protected WebElement loader;
+
+    @FindBy(xpath = "//input[@placeholder='Search by Talk Name']")
+    protected WebElement searchField;
+
+    @FindBy(css = ".evnt-card-body .evnt-card-cell")
+    protected List<WebElement> talksNamesInCards;
+
 
 
     public TalksLibrary openMoreFilters(){
@@ -85,6 +95,22 @@ public class TalksLibrary extends BasePage {
         BaseHooks.getDriver().findElement(By.xpath("//label[contains(text(),'" + value + "')]")).click();
         return this;
     }
+
+    public TalksLibrary enterInSearchField(String text){
+        searchField.sendKeys(text);
+        return this;
+    }
+
+    public List<String> getTalksHeaders() {
+        List<String> list = new ArrayList<>();
+        for (WebElement webElement : talksNamesInCards) {
+            String talksHeader = webElement.getText();
+            list.add(talksHeader);
+            logger.info("the talk was find: " + talksHeader);
+        }
+        return list;
+    }
+
 
 
 
