@@ -14,7 +14,7 @@ import java.util.*;
 
 public class DatesHelper {
 
-    private static final Logger logger = LogManager.getLogger(EventsTests.class);
+    private static final Logger logger = LogManager.getLogger(DatesHelper.class);
     public Date convertToDate(String textDate) throws ParseException {
         DateFormat format = new SimpleDateFormat("d MMMM yyyy", new Locale("en"));
         Date date = format.parse(textDate);

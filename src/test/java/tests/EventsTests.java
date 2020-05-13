@@ -11,6 +11,8 @@ import helpers.BaseHooks;
 
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventsTests extends BaseHooks {
 
@@ -32,6 +34,25 @@ public class EventsTests extends BaseHooks {
                     "Numbers of events from page and from counter do not match!");
         else logger.info(" No cards in upcoming events");
     }
+
+    @Test
+    public void checkOfTheOrderOfDisplayedBlocksInEventsCard() {
+        mainPage.openEventsPage();
+        allEventsPage.clickUpcomingEventsButton();
+        allEventsPage.blockNamesInEventsCard();
+        List<String> classNamesFromEventCard = new ArrayList<>();
+        for(String name : allEventsPage.blockNamesInEventsCard()) {
+            for (String blockClass : allEventsPage.getExpectedBlockClassNamesInEventsCard()) {
+                if (name.equals(blockClass) || name.equals("location"))  {
+                    logger.info("block class name -  " + name + "; the number in list is " + allEventsPage.blockNamesInEventsCard().indexOf(name));
+                    classNamesFromEventCard.add(name);
+                    System.out.println("block class " + blockClass);
+                }
+            }
+        }
+        Assertions.assertIterableEquals(allEventsPage.getExpectedBlockClassNamesInEventsCard(),classNamesFromEventCard);
+    }
+
 
     @Test
     public void checkValidityDatesOfEventsOnThisWeek() throws ParseException {
@@ -109,6 +130,7 @@ public class EventsTests extends BaseHooks {
             Assertions.assertTrue(talk.contains("Azure"));
         }
     }
+
 //        TO DO HERE:
 //    add exception for case whe cards are not found
 

@@ -16,8 +16,11 @@ import java.util.List;
 public class AllEventsPage extends BasePage {
 
     String pageUrl = baseUrl + "/events";
+
     private static final Logger logger = LogManager.getLogger(AllEventsPage.class);
 
+    List<String > expectedBlockClassNamesInEventsCard = Arrays.asList
+            ("online",  "language", "evnt-event-name", "date", "status free-attend", "evnt-people-table");
 
     @FindBy(css = ".active .white")
     protected WebElement upcomingEventsCounter;
@@ -34,15 +37,14 @@ public class AllEventsPage extends BasePage {
     @FindBy(css = ".size-m .evnt-card-wrapper")
     protected WebElement upcomingEventsCard;
 
-    @FindBy(css = ".size-m .evnt-card-wrapper")
+    @FindBy(css = ".evnt-event-card .evnt-card-wrapper")
     protected List<WebElement> eventList;
 
-    @FindBy(css =".evnt-events-tabs-container.tab-content :nth-last-child(n+1)")
+    @FindBy(css =".size-m.lavender .evnt-card-wrapper :nth-child(n + 1)")
     protected List<WebElement> cardInfoList;
 
     @FindBy(css=".evnt-cards-container:nth-child(1) .date")
     protected List<WebElement> datesOfThisWeek;
-
 
     @FindBy(xpath = "//h3[contains(text(),'This week')]")
     protected WebElement thisWeekSection;
@@ -53,15 +55,17 @@ public class AllEventsPage extends BasePage {
     @FindBy(xpath="//span[@class='evnt-tab-text desktop']")
     protected WebElement upcomingEventsButton;
 
+//    public List<String> getBlockClassNamesInEventsCard(){
+//        return blockClassNamesInEventsCard;
+//    }
 
-
-
+    public List<String> getExpectedBlockClassNamesInEventsCard(){
+        return expectedBlockClassNamesInEventsCard;
+    }
 
     public boolean upcomingEventsCardIsPresent() {
         return upcomingEventsCard.isDisplayed();
     }
-
-
 
     public void clickUpcomingEventsButton(){
         upcomingEventsButton.click();
@@ -87,9 +91,6 @@ public class AllEventsPage extends BasePage {
         checkboxCanada.click();
         //BaseHooks.getWait().until(ExpectedConditions.invisibilityOf(eventCard));
     }
-
-
-
 
     public List<WebElement> getEventList(){
         return eventList;
@@ -123,16 +124,15 @@ public class AllEventsPage extends BasePage {
         }
     }
 
-    public List<String> listOfValue(){
+    public List<String> blockNamesInEventsCard(){
         ArrayList<String>  list = new ArrayList<>();
         for (WebElement webElement : cardInfoList){
             String relText = webElement.getAttribute("class");
             list.add(relText);
-            System.out.println(relText);
+            //System.out.println(relText);
         }
         return list;
     }
-
 
 
     public int getNumberOfUpcomingEventsOnPage(){
@@ -140,18 +140,11 @@ public class AllEventsPage extends BasePage {
         return getEventList().size();
     }
 
-    public void openEventsPage(){
-        BaseHooks.getDriver().get(pageUrl);
-    }
-
     public int getNumOfUpcomingEventsFromCounter(){
         int num = Integer.parseInt(upcomingEventsCounter.getText());
         logger.info("Events number in counter equal " + num);
         return num;
-
     }
-
-
 
 
 }
