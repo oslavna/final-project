@@ -18,8 +18,24 @@
         <log4j-core.version>2.13.1</log4j-core.version>
         <junit.version>5.6.0</junit.version>
         <log4j.version>2.13.0</log4j.version>
+        <reportportal.version>4.0.1</reportportal.version>
         <browser>CHROME</browser>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>bintray-rp</id>
+            <url>http://dl.bintray.com/epam/reportportal</url>
+        </repository>
+        <repository>
+            <id>bintray-healenium</id>
+            <url>http://dl.bintray.com/epam/healenium</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencies>
 
@@ -78,6 +94,17 @@
             <version>1.0.10</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>agent-java-junit5</artifactId>
+            <version>${reportportal.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>logger-java-log4j</artifactId>
+            <version>${reportportal.version}</version>
+        </dependency>
+
 
 
 
@@ -92,6 +119,20 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>getClasspathFilenames</id>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

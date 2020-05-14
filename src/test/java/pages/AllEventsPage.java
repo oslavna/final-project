@@ -34,7 +34,7 @@ public class AllEventsPage extends BasePage {
     @FindBy(xpath = "//div[@class='evnt-dropdown-filter dropdown show']//div[4]//div[1]//div[2]//label[1]")
     protected WebElement checkboxCanada;
 
-    @FindBy(css = ".size-m .evnt-card-wrapper")
+    @FindBy(css = ".evnt-event-card .evnt-card-wrapper")
     protected WebElement upcomingEventsCard;
 
     @FindBy(css = ".evnt-event-card .evnt-card-wrapper")
