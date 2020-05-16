@@ -1,10 +1,20 @@
 package pages;
 
 import helpers.BaseHooks;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class MainPage extends BasePage {
+
+    private WebDriver driver;
+
+    public MainPage(WebDriver driver){
+        PageFactory.initElements(driver,this);
+        this.driver = driver;
+    }
 
     @FindBy(css = ".nav-item:nth-child(2) .nav-link")
     protected WebElement eventsTabButton;
@@ -21,13 +31,20 @@ public class MainPage extends BasePage {
     }
 
     public void openEventsPage(){
-        BaseHooks.getDriver().get(baseUrl);
-        getEventsTabButton().click();
+        driver.get(baseUrl);
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click()", eventsTabButton);
+
+//
+//        String script = "document.querySelector(\".nav-item:nth-child(2) .nav-link\").click();";
+//        ((JavascriptExecutor) driver).executeScript(script);
     }
 
     public void openTalksLibPage(){
-        BaseHooks.getDriver().get(baseUrl);
-        getTalksLibTabButton().click();
+        driver.get(baseUrl);
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click()", talksLibTabButton);
+
 
     }
 

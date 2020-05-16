@@ -10,10 +10,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import tests.EventsTests;
 
+import java.net.MalformedURLException;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
@@ -21,42 +24,44 @@ import java.util.concurrent.TimeUnit;
 public class BaseHooks {
 
     private static TestConfig config = ConfigFactory.create(TestConfig.class);
-    protected static WebDriver driver;
+    private WebDriver driver;
     private static final Logger logger = LogManager.getLogger(BaseHooks.class);
     protected static String browser = System.getProperty("browser").toUpperCase();
     public String baseUrl = config.url();
     protected static WebDriverWait wait;
+    protected static Actions actions;
 
-
-    public static WebDriverWait getWait() {
+    public  WebDriverWait getWait() {
         return wait;
     }
 
-    public static String getCurrentUrl() {
+    public  String getCurrentUrl() {
         return driver.getCurrentUrl();
     }
 
-    public static WebDriver getDriver() {
+    public WebDriver getDriver() {
         return driver;
     }
 
 
+    public static Actions getActions(){ return actions; }
 
 
-    @BeforeAll
-    public static void setup() {
+    //@BeforeAll
+    public  void setup() throws MalformedURLException {
         driver = WebDriverFactory.createNewDriver(DriverName.valueOf(browser));
         logger.info("WebDriver setup");
         if (driver != null) {
-            driver.manage().timeouts().implicitlyWait(8, TimeUnit.SECONDS);
-            wait = new WebDriverWait(driver, 10);
+            driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
+            wait = new WebDriverWait(driver, 8);
             driver.manage().window().maximize();
+            actions = new Actions(driver);
         }
 
     }
 
-    @AfterAll
-    public static void teardown() {
+    //@AfterAll
+    public  void teardown() {
         if (driver != null) {
             driver.quit();
             logger.info("WebDriver is going down...");

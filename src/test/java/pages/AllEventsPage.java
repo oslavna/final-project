@@ -2,11 +2,15 @@ package pages;
 
 import helpers.BaseHooks;
 
+import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 import java.text.ParseException;
@@ -14,6 +18,19 @@ import java.util.*;
 import java.util.List;
 
 public class AllEventsPage extends BasePage {
+
+    private WebDriver driver;
+    private WebDriverWait wait;
+    private Actions actions;
+
+
+    public AllEventsPage(WebDriver driver){
+        PageFactory.initElements(driver,this);
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, 10);
+        this.actions = new Actions(driver);
+    }
+
 
     String pageUrl = baseUrl + "/events";
 
@@ -28,10 +45,10 @@ public class AllEventsPage extends BasePage {
     @FindBy(css = ".nav-item+ .nav-item .white")
     protected WebElement pastEventsCounter;
 
-    @FindBy(xpath = "//div[@id='filter_location']//span[@class='evnt-filter-text']")
+    @FindBy(xpath = "//div[@id='filter_location']")
     protected WebElement filterLocation;
 
-    @FindBy(xpath = "//div[@class='evnt-dropdown-filter dropdown show']//div[4]//div[1]//div[2]//label[1]")
+    @FindBy(xpath = "//label[contains(text(),'Canada')]")
     protected WebElement checkboxCanada;
 
     @FindBy(css = ".evnt-event-card .evnt-card-wrapper")
@@ -40,7 +57,7 @@ public class AllEventsPage extends BasePage {
     @FindBy(css = ".evnt-event-card .evnt-card-wrapper")
     protected List<WebElement> eventList;
 
-    @FindBy(css =".size-m.lavender .evnt-card-wrapper :nth-child(n + 1)")
+    @FindBy(css =".cell-3:nth-child(1) .size-m .evnt-card-wrapper :nth-child(n + 1)")
     protected List<WebElement> cardInfoList;
 
     @FindBy(css=".evnt-cards-container:nth-child(1) .date")
@@ -55,9 +72,9 @@ public class AllEventsPage extends BasePage {
     @FindBy(xpath="//span[@class='evnt-tab-text desktop']")
     protected WebElement upcomingEventsButton;
 
-//    public List<String> getBlockClassNamesInEventsCard(){
-//        return blockClassNamesInEventsCard;
-//    }
+    @FindBy(xpath="//div[@class='evnt-global-loader']")
+    protected WebElement loader;
+
 
     public List<String> getExpectedBlockClassNamesInEventsCard(){
         return expectedBlockClassNamesInEventsCard;
@@ -80,16 +97,27 @@ public class AllEventsPage extends BasePage {
     }
 
     public void openLocationFilters(){
-        filterLocation.click();
+        actions.moveToElement(driver.findElement
+                (By.cssSelector("#filter_location"))).click().perform();
+
+
     }
 
     public WebElement getUpcomingEventsCard(){
         return upcomingEventsCard;
    }
 
-    public void chooseCanadaInList() throws InterruptedException {
-        checkboxCanada.click();
-        //BaseHooks.getWait().until(ExpectedConditions.invisibilityOf(eventCard));
+   public void waitForLoader(){
+           WebElement loader = driver.findElement(By.cssSelector(".evnt-global-loader"));
+            wait.until(ExpectedConditions.stalenessOf(loader));
+       }
+
+
+
+    public void chooseLocationInList(String value) {
+        String script = "document.querySelector(\"[data-value='Canada']\").click();";
+        ((JavascriptExecutor) driver).executeScript(script);
+
     }
 
     public List<WebElement> getEventList(){

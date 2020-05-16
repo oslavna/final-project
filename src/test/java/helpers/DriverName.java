@@ -2,5 +2,6 @@ package helpers;
 
 public enum DriverName {
         CHROME,
-        FIREFOX
+        FIREFOX,
+        REMOTE_CHROME
     }

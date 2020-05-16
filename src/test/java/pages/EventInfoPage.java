@@ -1,13 +1,21 @@
 package pages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.support.PageFactory;
 
 public class EventInfoPage extends BasePage{
 
     private static final Logger logger = LogManager.getLogger(EventInfoPage.class);
+    private WebDriver driver;
+
+    public EventInfoPage(WebDriver driver){
+        PageFactory.initElements(driver,this);
+        this.driver = driver;
+    }
 
     @FindBy(css = ".attend")
     WebElement attendButton;

@@ -2,26 +2,40 @@ package tests;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import pages.*;
 
 import helpers.BaseHooks;
 
 
-
+import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EventsTests extends BaseHooks {
 
     private static final Logger logger = LogManager.getLogger(EventsTests.class);
-    MainPage mainPage = new MainPage();
-    AllEventsPage allEventsPage = new AllEventsPage();
-    EventInfoPage eventInfoPage = new EventInfoPage();
-    TalksLibrary talksLibrary = new TalksLibrary();
-    TalksLibraryInfoPage talksLibraryInfoPage = new TalksLibraryInfoPage();
+    private MainPage mainPage;
+    private AllEventsPage allEventsPage;
+    private EventInfoPage eventInfoPage;
+    private TalksLibrary talksLibrary;
+    private TalksLibraryInfoPage talksLibraryInfoPage;
+
+    @BeforeEach
+    public void setUp() throws MalformedURLException {
+        setup();
+        mainPage = new MainPage(getDriver());
+        allEventsPage = new AllEventsPage(getDriver());
+        eventInfoPage = new EventInfoPage(getDriver());
+    }
+
+    @AfterEach
+    public void tearDown() {
+        teardown();
+    }
 
 
     @Test
@@ -34,6 +48,7 @@ public class EventsTests extends BaseHooks {
                     "Numbers of events from page and from counter do not match!");
         else logger.info(" No cards in upcoming events");
     }
+
 
     @Test
     public void checkOfTheOrderOfDisplayedBlocksInEventsCard() {
@@ -71,8 +86,10 @@ public class EventsTests extends BaseHooks {
         mainPage.openEventsPage();
         allEventsPage.clickPastEventsButton();
         allEventsPage.openLocationFilters();
-        allEventsPage.chooseCanadaInList();
+        allEventsPage.chooseLocationInList("Canada");
         allEventsPage.openLocationFilters();
+        allEventsPage.waitForLoader();
+       //Thread.sleep(2000);
         if (allEventsPage.upcomingEventsCardIsPresent())
             Assertions.assertEquals(allEventsPage.getNumberOfUpcomingEventsOnPage(),
                     allEventsPage.getNumOfUpcomingEventsFromCounter(),
@@ -97,43 +114,6 @@ public class EventsTests extends BaseHooks {
     }
     //TO DO here
     //переделать этот тест, добавить проверки
-
-
-    @Test
-    public void checkFilters() {
-        mainPage.openTalksLibPage();
-        talksLibrary.chooseInFilterCategory("Design");
-        talksLibrary.openMoreFilters().
-                chooseInFilterLocation("Belarus").
-                chooseInFilterLanguage("ENGLISH")
-                .waitForFiltersApply("Eng");
-        talksLibrary.openAnyTalksLibraryCard();
-        talksLibraryInfoPage.logCurrentUrl();
-        talksLibraryInfoPage.getLanguage();
-        Assertions.assertTrue(talksLibraryInfoPage.getLanguage().contains("ENGLISH"));
-        Assertions.assertTrue(talksLibraryInfoPage.getLocation().contains("Belarus"));
-        Assertions.assertTrue(talksLibraryInfoPage.getCategories().contains("Design"));
-
-//        TO DO here:
-//        change checks for all cards
-//        log info in checks
-//        improve asserts (as error collector )
-
-    }
-
-    @Test
-    public void searchForKeyword(){
-        mainPage.openTalksLibPage();
-        talksLibrary.enterInSearchField("Azure");
-        talksLibrary.getTalksHeaders();
-        for(String talk : talksLibrary.getTalksHeaders()){
-            Assertions.assertTrue(talk.contains("Azure"));
-        }
-    }
-
-//        TO DO HERE:
-//    add exception for case whe cards are not found
-
 
 }
 

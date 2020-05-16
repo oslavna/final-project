@@ -142,10 +142,15 @@
                     <systemPropertyVariables>
                         <browser>CHROME</browser>
                         <browser>${browser}</browser>
+<!--                        <parallel>methods</parallel>-->
+<!--                        <perCoreThreadCount>false</perCoreThreadCount>-->
+<!--                        <threadCount>2</threadCount>-->
                     </systemPropertyVariables>
                     <properties>
                         <configurationParameters>
-                            junit.jupiter.extensions.autodetection.enabled = true
+                            junit.jupiter.execution.parallel.enabled = true
+                            junit.jupiter.execution.parallel.mode.default = same_thread
+                            junit.jupiter.execution.parallel.mode.classes.default = concurrent
                         </configurationParameters>
                     </properties>
                 </configuration>
