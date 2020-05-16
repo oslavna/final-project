@@ -23,30 +23,17 @@ public class MainPage extends BasePage {
     @FindBy(css = ".nav-item:nth-child(3) .nav-link")
     protected WebElement talksLibTabButton;
 
-    public WebElement getEventsTabButton() {
-        return eventsTabButton;
-    }
-
-    public WebElement getTalksLibTabButton() {
-        return talksLibTabButton;
-    }
 
     public void openEventsPage(){
         driver.get(baseUrl);
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", eventsTabButton);
-
-//
-//        String script = "document.querySelector(\".nav-item:nth-child(2) .nav-link\").click();";
-//        ((JavascriptExecutor) driver).executeScript(script);
     }
 
     public void openTalksLibPage(){
         driver.get(baseUrl);
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", talksLibTabButton);
-
-
     }
 
 }

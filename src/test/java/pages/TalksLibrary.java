@@ -12,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import tests.TalksLibraryTests;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
@@ -22,12 +23,10 @@ import java.util.List;
 
 public class TalksLibrary extends BasePage {
 
-    private static final Logger logger = LogManager.getLogger();
-
+    private static final Logger logger = LogManager.getLogger(TalksLibrary.class);
     private SelfHealingDriver driver;
     private WebDriverWait wait;
     private Actions actions;
-
 
     public TalksLibrary(SelfHealingDriver driver){
         PageFactory.initElements(driver,this);
@@ -35,8 +34,6 @@ public class TalksLibrary extends BasePage {
         this.wait = new WebDriverWait(driver, 10);
         this.actions = new Actions(driver);
     }
-
-
 
     @FindBy(css = "#filter_category")
     protected WebElement filterCategory;
@@ -80,24 +77,15 @@ public class TalksLibrary extends BasePage {
     }
 
     public TalksLibrary openMoreFilters(){
-       // moreFilters.click();
-//        element = driver.find_element_by_class_name('pagination-r')
-//        driver.execute_script("arguments[0].click();", element)
-
-//        WebElement element = BaseHooks.getWait().until(ExpectedConditions.elementToBeClickable(moreFilters));
-//        element.click();
-
-
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", moreFilters);
-
         return this;
     }
 
     public TalksLibrary openAnyTalksLibraryCard(){
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
         try {
-            String script = "document.querySelector(\".evnt-card-wrapper\").click();";
-            ((JavascriptExecutor) driver).executeScript(script);
+            executor.executeScript("arguments[0].click()", talksCard);
             return this;
         }catch (NoSuchElementException e) {
             logger.error("No cards found");
@@ -105,33 +93,27 @@ public class TalksLibrary extends BasePage {
         return this;
     }
 
-    public void waitForFiltersApply(String language){
-        //BaseHooks.getWait().until(ExpectedConditions.textToBePresentInElement(talksCard,language));
-    }
-
-
-    public TalksLibrary selectDesignInFilterCategory(){
-        String script = "document.querySelector(\"[data-value='Design']\").click();";
-        ((JavascriptExecutor) driver).executeScript(script);
+    public TalksLibrary selectInFilterCategory(String category){
+        WebElement element = driver.findElement(By.cssSelector("[data-value='" + category +"']"));
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click()", element);
         return this;
     }
 
-    public void waitForLoader(){
-        WebElement loader = driver.findElement(By.cssSelector(".evnt-global-loader"));
+    public void waitForFiltersApply(){
         wait.until(ExpectedConditions.stalenessOf(loader));
     }
 
 
     public TalksLibrary clickFilterLocation(){
-        //BaseHooks.getDriver().findElement(By.cssSelector("#filter_location")).click();
-
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", filterLocation);
         return this;
     }
 
     public TalksLibrary clickFilterCategory(){
-        actions.moveToElement(driver.findElement(By.cssSelector("#filter_category"))).click().perform();
+       // actions.moveToElement(driver.findElement(By.cssSelector("#filter_category"))).click().perform();
+        actions.moveToElement(filterCategory).click().perform();
         return this;
     }
 
@@ -140,13 +122,10 @@ public class TalksLibrary extends BasePage {
         WebElement element = driver.findElement(By.xpath("//label[contains(text(),'" + value + "')]"));
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", element);
-       // BaseHooks.getDriver().findElement(By.xpath("//label[contains(text(),'" + value + "')]")).click();
         return this;
     }
 
     public TalksLibrary clickFilterLanguage(){
-        //BaseHooks.getDriver().findElement(By.cssSelector("#filter_location")).click();
-
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", filterLanguage);
         return this;
@@ -157,9 +136,6 @@ public class TalksLibrary extends BasePage {
         WebElement element = driver.findElement(By.xpath("//label[contains(text(),'" + value + "')]"));
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", element);
-
-       // filterLanguage.click();
-       // BaseHooks.getDriver().findElement(By.xpath("//label[contains(text(),'" + value + "')]")).click();
         return this;
     }
 

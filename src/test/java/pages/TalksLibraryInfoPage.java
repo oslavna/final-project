@@ -13,7 +13,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class TalksLibraryInfoPage extends BasePage {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(TalksLibraryInfoPage.class);
 
     private SelfHealingDriver driver;
 
@@ -31,14 +31,12 @@ public class TalksLibraryInfoPage extends BasePage {
     @FindBy(css = ".language.evnt-now-past-talk")
     protected WebElement language;
 
-
-    public void logCurrentUrl() {
-        //logger.info("Current url is " + BaseHooks.getCurrentUrl());
+    public boolean TalksInfoPageIsOpenNow() {
+        logger.info("Current url is " + driver.getCurrentUrl());
+        return (!driver.getCurrentUrl().equals(baseUrl + "/talks"));
     }
 
-    public String getLanguage(){
-        return language.getText();
-    }
+    public String getLanguage(){ return language.getText();   }
 
     public String getCategories(){
         return categories.getText();

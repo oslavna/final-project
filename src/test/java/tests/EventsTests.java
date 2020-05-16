@@ -34,6 +34,7 @@ public class EventsTests extends BaseHooks {
 
     @AfterEach
     public void tearDown() {
+        logger.info("test completed");
         teardown();
     }
 

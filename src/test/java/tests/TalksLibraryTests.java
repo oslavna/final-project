@@ -10,11 +10,10 @@ import java.net.MalformedURLException;
 
 public class TalksLibraryTests extends BaseHooks {
 
-
-    private static final Logger logger = LogManager.getLogger(EventsTests.class);
+    private static final Logger logger = LogManager.getLogger(TalksLibraryTests.class);
     MainPage mainPage;
-    private TalksLibrary talksLibrary;
-    private TalksLibraryInfoPage talksLibraryInfoPage;
+    TalksLibrary talksLibrary;
+    TalksLibraryInfoPage talksLibraryInfoPage;
 
     @BeforeEach
     public void setUp() throws MalformedURLException {
@@ -26,45 +25,38 @@ public class TalksLibraryTests extends BaseHooks {
 
     @AfterEach
     public void tearDown() {
+        logger.info("test completed");
         teardown();
     }
 
-
     @Test
-    public void checkFilters() {
+    public void checkFiltersApplyingOnTaskLibraryPage() {
+        logger.info(new Object(){}.getClass().getEnclosingMethod().getName() + " test is executing now");
         mainPage.openTalksLibPage();
-        talksLibrary.clickFilterCategory();
-        talksLibrary.selectDesignInFilterCategory();
-        talksLibrary.openMoreFilters().
+        talksLibrary.clickFilterCategory().
+                selectInFilterCategory("Design").
+                openMoreFilters().
                 clickFilterLocation().
                 selectInFilterLocation("Belarus").
-                clickFilterLanguage().selectInFilterLanguage("ENGLISH");
-        //.waitForFiltersApply("Eng");
-        talksLibrary.waitForLoader();
+                clickFilterLanguage().selectInFilterLanguage("ENGLISH").
+                waitForFiltersApply();
         talksLibrary.openAnyTalksLibraryCard();
-        talksLibraryInfoPage.logCurrentUrl();
-        talksLibraryInfoPage.getLanguage();
+        Assertions.assertTrue(talksLibraryInfoPage.TalksInfoPageIsOpenNow());
         Assertions.assertTrue(talksLibraryInfoPage.getLanguage().contains("ENGLISH"));
         Assertions.assertTrue(talksLibraryInfoPage.getLocation().contains("Belarus"));
         Assertions.assertTrue(talksLibraryInfoPage.getCategories().contains("Design"));
-//        TO DO here:
-//        change checks for all cards
-//        log info in checks
-//        improve asserts (as error collector )
     }
 
     @Test
-    public void searchForKeyword(){
+    public void searchForKeywordInTalksLib(){
+        logger.info(new Object(){}.getClass().getEnclosingMethod().getName() + " test is executing now");
         mainPage.openTalksLibPage();
         talksLibrary.enterInSearchField("Azure");
         talksLibrary.getTalksHeaders();
         for(String talk : talksLibrary.getTalksHeaders()){
             Assertions.assertTrue(talk.contains("Azure"));
         }
+        logger.info("test completed");
     }
-
-//        TO DO HERE:
-//    add exception for case whe cards are not found
-
 
 }
