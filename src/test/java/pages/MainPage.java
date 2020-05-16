@@ -1,5 +1,6 @@
 package pages;
 
+import com.epam.healenium.SelfHealingDriver;
 import helpers.BaseHooks;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -9,9 +10,9 @@ import org.openqa.selenium.support.PageFactory;
 
 public class MainPage extends BasePage {
 
-    private WebDriver driver;
+    private SelfHealingDriver driver;
 
-    public MainPage(WebDriver driver){
+    public MainPage(SelfHealingDriver driver){
         PageFactory.initElements(driver,this);
         this.driver = driver;
     }

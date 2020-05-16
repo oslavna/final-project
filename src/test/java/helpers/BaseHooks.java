@@ -1,5 +1,7 @@
 package helpers;
 
+import com.epam.healenium.SelfHealingDriver;
+import com.typesafe.config.Config;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.aeonbits.owner.ConfigFactory;
 import org.apache.logging.log4j.LogManager;
@@ -24,12 +26,13 @@ import java.util.concurrent.TimeUnit;
 public class BaseHooks {
 
     private static TestConfig config = ConfigFactory.create(TestConfig.class);
-    private WebDriver driver;
+    //private WebDriver driver;
     private static final Logger logger = LogManager.getLogger(BaseHooks.class);
     protected static String browser = System.getProperty("browser").toUpperCase();
     public String baseUrl = config.url();
     protected static WebDriverWait wait;
     protected static Actions actions;
+    protected SelfHealingDriver driver;
 
     public  WebDriverWait getWait() {
         return wait;
@@ -39,7 +42,7 @@ public class BaseHooks {
         return driver.getCurrentUrl();
     }
 
-    public WebDriver getDriver() {
+    public SelfHealingDriver getDriver() {
         return driver;
     }
 
@@ -49,7 +52,10 @@ public class BaseHooks {
 
     //@BeforeAll
     public  void setup() throws MalformedURLException {
-        driver = WebDriverFactory.createNewDriver(DriverName.valueOf(browser));
+
+        WebDriver delegate = WebDriverFactory.createNewDriver(DriverName.valueOf(browser));
+        Config config = com.typesafe.config.ConfigFactory.load("healenium.properties");
+        driver = SelfHealingDriver.create(delegate, config);
         logger.info("WebDriver setup");
         if (driver != null) {
             driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);

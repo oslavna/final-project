@@ -1,5 +1,6 @@
 package pages;
 
+import com.epam.healenium.SelfHealingDriver;
 import helpers.BaseHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,9 +15,9 @@ public class TalksLibraryInfoPage extends BasePage {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private WebDriver driver;
+    private SelfHealingDriver driver;
 
-    public TalksLibraryInfoPage(WebDriver driver){
+    public TalksLibraryInfoPage(SelfHealingDriver driver){
         PageFactory.initElements(driver,this);
         this.driver = driver;
     }

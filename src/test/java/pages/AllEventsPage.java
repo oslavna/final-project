@@ -1,5 +1,6 @@
 package pages;
 
+import com.epam.healenium.SelfHealingDriver;
 import helpers.BaseHooks;
 
 import org.openqa.selenium.*;
@@ -19,12 +20,12 @@ import java.util.List;
 
 public class AllEventsPage extends BasePage {
 
-    private WebDriver driver;
+    private SelfHealingDriver driver;
     private WebDriverWait wait;
     private Actions actions;
 
 
-    public AllEventsPage(WebDriver driver){
+    public AllEventsPage(SelfHealingDriver driver){
         PageFactory.initElements(driver,this);
         this.driver = driver;
         this.wait = new WebDriverWait(driver, 10);
