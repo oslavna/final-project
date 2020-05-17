@@ -20,6 +20,7 @@ import java.util.List;
 
 public class AllEventsPage extends BasePage {
 
+    private static final Logger logger = LogManager.getLogger(AllEventsPage.class);
     private SelfHealingDriver driver;
     private WebDriverWait wait;
     private Actions actions;
@@ -32,28 +33,17 @@ public class AllEventsPage extends BasePage {
         this.actions = new Actions(driver);
     }
 
-
-    String pageUrl = baseUrl + "/events";
-
-    private static final Logger logger = LogManager.getLogger(AllEventsPage.class);
-
     List<String > expectedBlockClassNamesInEventsCard = Arrays.asList
             ("online",  "language", "evnt-event-name", "date", "status free-attend", "evnt-people-table");
 
     @FindBy(css = ".active .white")
-    protected WebElement upcomingEventsCounter;
-
-    @FindBy(css = ".nav-item+ .nav-item .white")
-    protected WebElement pastEventsCounter;
+    protected WebElement eventsCounter;
 
     @FindBy(xpath = "//div[@id='filter_location']")
     protected WebElement filterLocation;
 
-    @FindBy(xpath = "//label[contains(text(),'Canada')]")
-    protected WebElement checkboxCanada;
-
     @FindBy(css = ".evnt-event-card .evnt-card-wrapper")
-    protected WebElement upcomingEventsCard;
+    protected WebElement eventsCard;
 
     @FindBy(css = ".evnt-event-card .evnt-card-wrapper")
     protected List<WebElement> eventList;
@@ -62,7 +52,7 @@ public class AllEventsPage extends BasePage {
     protected List<WebElement> cardInfoList;
 
     @FindBy(css=".evnt-cards-container:nth-child(1) .date")
-    protected List<WebElement> datesOfThisWeek;
+    protected List<WebElement> datesOfPresentCards;
 
     @FindBy(xpath = "//h3[contains(text(),'This week')]")
     protected WebElement thisWeekSection;
@@ -81,8 +71,8 @@ public class AllEventsPage extends BasePage {
         return expectedBlockClassNamesInEventsCard;
     }
 
-    public boolean upcomingEventsCardIsPresent() {
-        return upcomingEventsCard.isDisplayed();
+    public boolean eventsCardIsPresent() {
+        return eventsCard.isDisplayed();
     }
 
     public void clickUpcomingEventsButton(){
@@ -90,58 +80,55 @@ public class AllEventsPage extends BasePage {
     }
 
     public void clickEventsCard(){
-        upcomingEventsCard.click();
+        eventsCard.click();
     }
 
-    public void clickPastEventsButton(){
+    public AllEventsPage clickPastEventsButton(){
         pastEventsButton.click();
+        return this;
     }
 
-    public void openLocationFilters(){
-        actions.moveToElement(driver.findElement
-                (By.cssSelector("#filter_location"))).click().perform();
-
-
+    public AllEventsPage openLocationFilters(){
+        actions.moveToElement(filterLocation).click().perform();
+        return this;
     }
 
-    public WebElement getUpcomingEventsCard(){
-        return upcomingEventsCard;
-   }
+    public void waitForFiltersApply(){
+        wait.until(ExpectedConditions.stalenessOf(loader));
+    }
 
-   public void waitForLoader(){
-           WebElement loader = driver.findElement(By.cssSelector(".evnt-global-loader"));
-            wait.until(ExpectedConditions.stalenessOf(loader));
-       }
-
-
-
-    public void chooseLocationInList(String value) {
-        String script = "document.querySelector(\"[data-value='Canada']\").click();";
-        ((JavascriptExecutor) driver).executeScript(script);
-
+    public AllEventsPage chooseLocationInList(String country) {
+        WebElement element = driver.findElement(By.cssSelector("[data-value='" + country +"']"));
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click()", element);
+        return this;
     }
 
     public List<WebElement> getEventList(){
         return eventList;
     }
 
-    public List<WebElement> getCardInfo(){
-        return cardInfoList;
-    }
-
-
     public List<String> getDatesOfUpcomingeventsThisWeek() throws ParseException {
         ArrayList<String>  list = new ArrayList<>();
-        for (WebElement webElement : datesOfThisWeek){
-            String relText = webElement.getText();
-            list.add(relText);
-            System.out.println(relText);
+        for (WebElement webElement : datesOfPresentCards){
+            String date = webElement.getText();
+            list.add(date);
+            logger.info("Date found in cards" + date);
         }
         return list;
     }
 
     public boolean checkDateOnValidity(String textDate) throws ParseException {
         return datesHelper.checkDate(textDate);
+    }
+
+    public boolean datesIsBeforeToday() throws ParseException {
+        for (WebElement webElement : datesOfPresentCards) {
+            String date = webElement.getText();
+           if (datesHelper.dateIsBeforeToday(date))
+               return true;
+        }
+        return false;
     }
 
     public boolean thisWeekSectionIsPresent() {
@@ -158,22 +145,20 @@ public class AllEventsPage extends BasePage {
         for (WebElement webElement : cardInfoList){
             String relText = webElement.getAttribute("class");
             list.add(relText);
-            //System.out.println(relText);
         }
         return list;
     }
 
 
-    public int getNumberOfUpcomingEventsOnPage(){
+    public int getNumberOfEventsCardsOnPage(){
         logger.info("Event cards list size  is " + getEventList().size());
         return getEventList().size();
     }
 
-    public int getNumOfUpcomingEventsFromCounter(){
-        int num = Integer.parseInt(upcomingEventsCounter.getText());
+    public int getNumOfEventsFromCounter(){
+        int num = Integer.parseInt(eventsCounter.getText());
         logger.info("Events number in counter equal " + num);
         return num;
     }
-
 
 }

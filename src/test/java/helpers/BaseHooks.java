@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 public class BaseHooks {
 
     private static TestConfig config = ConfigFactory.create(TestConfig.class);
-    //private WebDriver driver;
     private static final Logger logger = LogManager.getLogger(BaseHooks.class);
     protected static String browser = System.getProperty("browser").toUpperCase();
     public String baseUrl = config.url();
@@ -34,23 +33,10 @@ public class BaseHooks {
     protected static Actions actions;
     protected SelfHealingDriver driver;
 
-    public  WebDriverWait getWait() {
-        return wait;
-    }
-
-    public  String getCurrentUrl() {
-        return driver.getCurrentUrl();
-    }
-
     public SelfHealingDriver getDriver() {
         return driver;
     }
 
-
-    public static Actions getActions(){ return actions; }
-
-
-    //@BeforeAll
     public  void setup() throws MalformedURLException {
 
         WebDriver delegate = WebDriverFactory.createNewDriver(DriverName.valueOf(browser));
@@ -66,7 +52,6 @@ public class BaseHooks {
 
     }
 
-    //@AfterAll
     public  void teardown() {
         if (driver != null) {
             driver.quit();

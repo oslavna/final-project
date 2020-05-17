@@ -72,10 +72,6 @@ public class TalksLibrary extends BasePage {
     protected List<WebElement> talksNamesInCards;
 
 
-    public WebElement getFilterByCategory(){
-        return filterCategory;
-    }
-
     public TalksLibrary openMoreFilters(){
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", moreFilters);
@@ -112,7 +108,6 @@ public class TalksLibrary extends BasePage {
     }
 
     public TalksLibrary clickFilterCategory(){
-       // actions.moveToElement(driver.findElement(By.cssSelector("#filter_category"))).click().perform();
         actions.moveToElement(filterCategory).click().perform();
         return this;
     }

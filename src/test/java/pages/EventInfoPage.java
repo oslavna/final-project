@@ -37,25 +37,33 @@ public class EventInfoPage extends BasePage{
     WebElement headOfEvent;
 
 
-    public WebElement getAttendButton(){
-        return attendButton;
-    }
 
     public boolean agendaIsPresent(){
+        logger.info(agenda.getText() + "   //: agenda text");
         return agenda.isDisplayed();
     }
+
     public boolean headerIsPresent(){
+        logger.info(headOfEvent.getText() + "   //: displayed header text");
         return headOfEvent.isDisplayed();
     }
-    public boolean onlineIsPresent(){
+
+    public boolean onlineIsPresent() {
+        logger.info(online.getText() + "   //: header text");
         return online.isDisplayed();
     }
 
     public boolean dateIsPresent(){
+        logger.info(date.getText() + "   //: date");
         return date.isDisplayed();
+    }
+    public boolean locationIsPresent() {
+        logger.info(location.getText() + "   //: location text");
+        return location.isDisplayed();
     }
 
     public boolean attendButtonIsPresent(){
+        logger.info(attendButton.getText() + "   //: attendButton text");
         return attendButton.isDisplayed();
     }
 }

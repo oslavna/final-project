@@ -4,10 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import pages.*;
-
 import helpers.BaseHooks;
-
-
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -21,8 +18,6 @@ public class EventsTests extends BaseHooks {
     private MainPage mainPage;
     private AllEventsPage allEventsPage;
     private EventInfoPage eventInfoPage;
-    private TalksLibrary talksLibrary;
-    private TalksLibraryInfoPage talksLibraryInfoPage;
 
     @BeforeEach
     public void setUp() throws MalformedURLException {
@@ -38,14 +33,13 @@ public class EventsTests extends BaseHooks {
         teardown();
     }
 
-
     @Test
     public void checkOfUpcomingEventsCounter() {
         mainPage.openEventsPage();
         allEventsPage.clickUpcomingEventsButton();
-        if (allEventsPage.upcomingEventsCardIsPresent())
-            Assertions.assertEquals(allEventsPage.getNumberOfUpcomingEventsOnPage(),
-                    allEventsPage.getNumOfUpcomingEventsFromCounter(),
+        if (allEventsPage.eventsCardIsPresent())
+            Assertions.assertEquals(allEventsPage.getNumberOfEventsCardsOnPage(),
+                    allEventsPage.getNumOfEventsFromCounter(),
                     "Numbers of events from page and from counter do not match!");
         else logger.info(" No cards in upcoming events");
     }
@@ -66,7 +60,8 @@ public class EventsTests extends BaseHooks {
                 }
             }
         }
-        Assertions.assertIterableEquals(allEventsPage.getExpectedBlockClassNamesInEventsCard(),classNamesFromEventCard);
+        Assertions.assertIterableEquals(allEventsPage.getExpectedBlockClassNamesInEventsCard(),classNamesFromEventCard,
+                "The order is wrong");
     }
 
 
@@ -77,44 +72,46 @@ public class EventsTests extends BaseHooks {
         if (allEventsPage.thisWeekSectionIsPresent())
             for (String date : allEventsPage.getDatesOfUpcomingeventsThisWeek()) {
                 Assertions.assertTrue(allEventsPage.checkDateOnValidity(date),
-                        "Date is not valid");
+                        "Date not within this week");
             }
     }
 
 
     @Test
-    public void checkCanadaEvents() throws InterruptedException {
+    public void checkPastEventsInCountry() throws ParseException {
+        logger.info(new Object(){}.getClass().getEnclosingMethod().getName() + " test is executing now");
         mainPage.openEventsPage();
-        allEventsPage.clickPastEventsButton();
-        allEventsPage.openLocationFilters();
-        allEventsPage.chooseLocationInList("Canada");
-        allEventsPage.openLocationFilters();
-        allEventsPage.waitForLoader();
-       //Thread.sleep(2000);
-        if (allEventsPage.upcomingEventsCardIsPresent())
-            Assertions.assertEquals(allEventsPage.getNumberOfUpcomingEventsOnPage(),
-                    allEventsPage.getNumOfUpcomingEventsFromCounter(),
+        allEventsPage.clickPastEventsButton().
+                openLocationFilters().
+                chooseLocationInList("Armenia").
+                waitForFiltersApply();
+        Assertions.assertTrue(allEventsPage.datesIsBeforeToday(), "Dates from events card contain before today dates");
+        if (allEventsPage.eventsCardIsPresent())
+            Assertions.assertEquals(allEventsPage.getNumberOfEventsCardsOnPage(),
+                    allEventsPage.getNumOfEventsFromCounter(),
                     "Numbers of events from page and from counter do not match!");
         else logger.info(" No cards in upcoming events");
     }
 
-//    TO DO HERE
-//    make Canada as parameter of method
 
     @Test
     public void checkOpeningEventCard() {
+        logger.info(new Object(){}.getClass().getEnclosingMethod().getName() + " test is executing now");
         mainPage.openEventsPage();
         allEventsPage.clickUpcomingEventsButton();
         allEventsPage.clickEventsCard();
-        eventInfoPage.agendaIsPresent();
-        eventInfoPage.attendButtonIsPresent();
-        eventInfoPage.dateIsPresent();
-        eventInfoPage.headerIsPresent();
-        eventInfoPage.onlineIsPresent();
-
+        Assertions.assertTrue(eventInfoPage.attendButtonIsPresent(),
+                "No attend button on event info page");
+        Assertions.assertTrue(eventInfoPage.agendaIsPresent(),
+                "No agenda on event info page");
+        Assertions.assertTrue(eventInfoPage.dateIsPresent(),
+                "No date on event info page");
+        Assertions.assertTrue(eventInfoPage.headerIsPresent(),
+                "No header on event info page");
+        Assertions.assertTrue(eventInfoPage.onlineIsPresent()||eventInfoPage.locationIsPresent(),
+                "No location on event info page");
     }
-    //TO DO here
-    //переделать этот тест, добавить проверки
+
 
 }
 

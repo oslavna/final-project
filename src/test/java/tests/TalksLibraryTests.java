@@ -41,10 +41,13 @@ public class TalksLibraryTests extends BaseHooks {
                 clickFilterLanguage().selectInFilterLanguage("ENGLISH").
                 waitForFiltersApply();
         talksLibrary.openAnyTalksLibraryCard();
-        Assertions.assertTrue(talksLibraryInfoPage.TalksInfoPageIsOpenNow());
-        Assertions.assertTrue(talksLibraryInfoPage.getLanguage().contains("ENGLISH"));
-        Assertions.assertTrue(talksLibraryInfoPage.getLocation().contains("Belarus"));
-        Assertions.assertTrue(talksLibraryInfoPage.getCategories().contains("Design"));
+        Assertions.assertTrue(talksLibraryInfoPage.TalksInfoPageIsOpenNow(), "The URL didn't change");
+        Assertions.assertTrue(talksLibraryInfoPage.getLanguage().contains("ENGLISH"),
+                "Language field doesn't contain the required parameter");
+        Assertions.assertTrue(talksLibraryInfoPage.getLocation().contains("Belarus"),
+                "Location field doesn't contain the required parameter");
+        Assertions.assertTrue(talksLibraryInfoPage.getCategories().contains("Design"),
+                "Category field doesn't contain the required parameter");
     }
 
     @Test
@@ -54,7 +57,7 @@ public class TalksLibraryTests extends BaseHooks {
         talksLibrary.enterInSearchField("Azure");
         talksLibrary.getTalksHeaders();
         for(String talk : talksLibrary.getTalksHeaders()){
-            Assertions.assertTrue(talk.contains("Azure"));
+            Assertions.assertTrue(talk.contains("Azure"), "headers don't contain the keyword");
         }
         logger.info("test completed");
     }
