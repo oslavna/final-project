@@ -1,8 +1,7 @@
 package pages;
 
 import com.epam.healenium.SelfHealingDriver;
-import helpers.BaseHooks;
-
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
@@ -67,70 +66,6 @@ public class AllEventsPage extends BasePage {
     protected WebElement loader;
 
 
-    public List<String> getExpectedBlockClassNamesInEventsCard(){
-        return expectedBlockClassNamesInEventsCard;
-    }
-
-    public boolean eventsCardIsPresent() {
-        return eventsCard.isDisplayed();
-    }
-
-    public void clickUpcomingEventsButton(){
-        upcomingEventsButton.click();
-    }
-
-    public void clickEventsCard(){
-        eventsCard.click();
-    }
-
-    public AllEventsPage clickPastEventsButton(){
-        pastEventsButton.click();
-        return this;
-    }
-
-    public AllEventsPage openLocationFilters(){
-        actions.moveToElement(filterLocation).click().perform();
-        return this;
-    }
-
-    public void waitForFiltersApply(){
-        wait.until(ExpectedConditions.stalenessOf(loader));
-    }
-
-    public AllEventsPage chooseLocationInList(String country) {
-        WebElement element = driver.findElement(By.cssSelector("[data-value='" + country +"']"));
-        JavascriptExecutor executor = (JavascriptExecutor)driver;
-        executor.executeScript("arguments[0].click()", element);
-        return this;
-    }
-
-    public List<WebElement> getEventList(){
-        return eventList;
-    }
-
-    public List<String> getDatesOfUpcomingeventsThisWeek() throws ParseException {
-        ArrayList<String>  list = new ArrayList<>();
-        for (WebElement webElement : datesOfPresentCards){
-            String date = webElement.getText();
-            list.add(date);
-            logger.info("Date found in cards" + date);
-        }
-        return list;
-    }
-
-    public boolean checkDateOnValidity(String textDate) throws ParseException {
-        return datesHelper.checkDate(textDate);
-    }
-
-    public boolean datesIsBeforeToday() throws ParseException {
-        for (WebElement webElement : datesOfPresentCards) {
-            String date = webElement.getText();
-           if (datesHelper.dateIsBeforeToday(date))
-               return true;
-        }
-        return false;
-    }
-
     public boolean thisWeekSectionIsPresent() {
         try {
             return thisWeekSection.isDisplayed();
@@ -149,6 +84,19 @@ public class AllEventsPage extends BasePage {
         return list;
     }
 
+    public List<WebElement> getEventList(){
+        return eventList;
+    }
+
+    public List<String> getDatesOfUpcomingeventsThisWeek() {
+        ArrayList<String>  list = new ArrayList<>();
+        for (WebElement webElement : datesOfPresentCards){
+            String date = webElement.getText();
+            list.add(date);
+            logger.info("Date found in cards" + date);
+        }
+        return list;
+    }
 
     public int getNumberOfEventsCardsOnPage(){
         logger.info("Event cards list size  is " + getEventList().size());
@@ -159,6 +107,63 @@ public class AllEventsPage extends BasePage {
         int num = Integer.parseInt(eventsCounter.getText());
         logger.info("Events number in counter equal " + num);
         return num;
+    }
+
+    public List<String> getExpectedBlockClassNamesInEventsCard(){
+        return expectedBlockClassNamesInEventsCard;
+    }
+
+    public boolean eventsCardIsPresent() {
+        return eventsCard.isDisplayed();
+    }
+    @Step("Открытие предстоящих мероприятий")
+    public void clickUpcomingEventsButton(){
+        upcomingEventsButton.click();
+    }
+
+    @Step("Открытие карточки мероприятия")
+    public void clickEventsCard(){
+        eventsCard.click();
+    }
+
+    @Step("Открытие прошедших мероприятий")
+    public AllEventsPage clickPastEventsButton(){
+        pastEventsButton.click();
+        return this;
+    }
+
+    @Step("Открытие фильтрации по параметру \"Location\"")
+    public AllEventsPage openLocationFilters(){
+        actions.moveToElement(filterLocation).click().perform();
+        return this;
+    }
+
+    @Step("Ожидание применения фильтров")
+    public void waitForFiltersApply(){
+        wait.until(ExpectedConditions.stalenessOf(loader));
+    }
+
+    @Step("Выбор страны в фильтре")
+    public AllEventsPage chooseLocationInList(String country) {
+        WebElement element = driver.findElement(By.cssSelector("[data-value='" + country +"']"));
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click()", element);
+        return this;
+    }
+
+    @Step("Проверка, что дата в пределах этой недели")
+    public boolean checkDateOnValidity(String textDate) throws ParseException {
+        return datesHelper.checkDate(textDate);
+    }
+
+    @Step("Проверка, что дата прошедшая")
+    public boolean datesIsBeforeToday() throws ParseException {
+        for (WebElement webElement : datesOfPresentCards) {
+            String date = webElement.getText();
+            if (datesHelper.dateIsBeforeToday(date))
+                return true;
+        }
+        return false;
     }
 
 }

@@ -25,8 +25,6 @@ public class WebDriverFactory {
 
         switch (name) {
             case CHROME:
-//                WebDriverManager.firefoxdriver().setup();
-//                driver = new FirefoxDriver();
                 WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver();
                 break;

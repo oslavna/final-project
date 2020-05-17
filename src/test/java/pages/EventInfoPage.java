@@ -1,7 +1,6 @@
 package pages;
 
 import com.epam.healenium.SelfHealingDriver;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +34,6 @@ public class EventInfoPage extends BasePage{
 
     @FindBy(css=".hero")
     WebElement headOfEvent;
-
 
 
     public boolean agendaIsPresent(){

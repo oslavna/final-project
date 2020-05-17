@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Owner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
@@ -10,7 +12,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Epic("Events in EPAM")
+@Owner("Olga Slavnova")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EventsTests extends BaseHooks {
 
@@ -33,7 +36,7 @@ public class EventsTests extends BaseHooks {
         teardown();
     }
 
-    @Test
+    @Test @DisplayName("Просмотр предстоящих мероприятий")
     public void checkOfUpcomingEventsCounter() {
         mainPage.openEventsPage();
         allEventsPage.clickUpcomingEventsButton();
@@ -45,7 +48,7 @@ public class EventsTests extends BaseHooks {
     }
 
 
-    @Test
+    @Test @DisplayName("Просмотр карточек мероприятий")
     public void checkOfTheOrderOfDisplayedBlocksInEventsCard() {
         mainPage.openEventsPage();
         allEventsPage.clickUpcomingEventsButton();
@@ -65,7 +68,7 @@ public class EventsTests extends BaseHooks {
     }
 
 
-    @Test
+    @Test @DisplayName("Валидация дат предстоящих мероприятий")
     public void checkValidityDatesOfEventsOnThisWeek() throws ParseException {
         mainPage.openEventsPage();
         allEventsPage.clickUpcomingEventsButton();
@@ -77,7 +80,7 @@ public class EventsTests extends BaseHooks {
     }
 
 
-    @Test
+    @Test @DisplayName("Просмотр прошедших мероприятий в Канаде")
     public void checkPastEventsInCountry() throws ParseException {
         logger.info(new Object(){}.getClass().getEnclosingMethod().getName() + " test is executing now");
         mainPage.openEventsPage();
@@ -94,7 +97,7 @@ public class EventsTests extends BaseHooks {
     }
 
 
-    @Test
+    @Test @DisplayName("Просмотр детальной информации о мероприятии")
     public void checkOpeningEventCard() {
         logger.info(new Object(){}.getClass().getEnclosingMethod().getName() + " test is executing now");
         mainPage.openEventsPage();
@@ -111,8 +114,6 @@ public class EventsTests extends BaseHooks {
         Assertions.assertTrue(eventInfoPage.onlineIsPresent()||eventInfoPage.locationIsPresent(),
                 "No location on event info page");
     }
-
-
 }
 
 

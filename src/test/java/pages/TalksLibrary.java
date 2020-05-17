@@ -2,22 +2,16 @@ package pages;
 
 
 import com.epam.healenium.SelfHealingDriver;
-import helpers.BaseHooks;
+import io.qameta.allure.Step;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jsoup.Connection;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import tests.TalksLibraryTests;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
-
-
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +32,6 @@ public class TalksLibrary extends BasePage {
     @FindBy(css = "#filter_category")
     protected WebElement filterCategory;
 
-    @FindBy(css = "#filter_media")
-    protected WebElement filterMedia;
-
     @FindBy(css = "#filter_location")
     protected WebElement filterLocation;
 
@@ -49,15 +40,6 @@ public class TalksLibrary extends BasePage {
 
     @FindBy(css = "#filter_language")
     protected WebElement filterLanguage;
-
-    @FindBy(xpath = "//label[@class='form-check-label group-items'][contains(text(),'Design')]")
-    protected WebElement chooseCategory;
-
-    @FindBy(css = ".language-cell .language")
-    protected WebElement languageInCards;
-
-    @FindBy(xpath = "//label[contains(text(),'Belarus')]")
-    protected WebElement chooseLocation;
 
     @FindBy(css = ".evnt-card-wrapper")
     protected WebElement talksCard;
@@ -72,12 +54,8 @@ public class TalksLibrary extends BasePage {
     protected List<WebElement> talksNamesInCards;
 
 
-    public TalksLibrary openMoreFilters(){
-        JavascriptExecutor executor = (JavascriptExecutor)driver;
-        executor.executeScript("arguments[0].click()", moreFilters);
-        return this;
-    }
 
+    @Step("Переход на страницу доклада")
     public TalksLibrary openAnyTalksLibraryCard(){
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         try {
@@ -89,6 +67,7 @@ public class TalksLibrary extends BasePage {
         return this;
     }
 
+    @Step("Открытие фильтрации по параметру \"Category\"")
     public TalksLibrary selectInFilterCategory(String category){
         WebElement element = driver.findElement(By.cssSelector("[data-value='" + category +"']"));
         JavascriptExecutor executor = (JavascriptExecutor)driver;
@@ -96,23 +75,24 @@ public class TalksLibrary extends BasePage {
         return this;
     }
 
+    @Step("Ожидание применения фильтров")
     public void waitForFiltersApply(){
         wait.until(ExpectedConditions.stalenessOf(loader));
     }
 
-
+    @Step("Открытие фильтрации по параметру \"Location\"")
     public TalksLibrary clickFilterLocation(){
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", filterLocation);
         return this;
     }
-
+    @Step("Открытие фильтрации по параметру \"Category\"")
     public TalksLibrary clickFilterCategory(){
         actions.moveToElement(filterCategory).click().perform();
         return this;
     }
 
-
+    @Step("Выбор локации в фильтре")
     public TalksLibrary selectInFilterLocation(String value){
         WebElement element = driver.findElement(By.xpath("//label[contains(text(),'" + value + "')]"));
         JavascriptExecutor executor = (JavascriptExecutor)driver;
@@ -120,13 +100,14 @@ public class TalksLibrary extends BasePage {
         return this;
     }
 
+    @Step("Открытие фильтрации по параметру \"Language\"")
     public TalksLibrary clickFilterLanguage(){
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", filterLanguage);
         return this;
     }
 
-
+    @Step("Выбор языка в фильтре")
     public TalksLibrary selectInFilterLanguage(String value){
         WebElement element = driver.findElement(By.xpath("//label[contains(text(),'" + value + "')]"));
         JavascriptExecutor executor = (JavascriptExecutor)driver;
@@ -134,8 +115,16 @@ public class TalksLibrary extends BasePage {
         return this;
     }
 
+    @Step("Ввод ключевого слова в строку поиска")
     public TalksLibrary enterInSearchField(String text){
         searchField.sendKeys(text);
+        return this;
+    }
+
+    @Step("Открытие дополнительных фильтров")
+    public TalksLibrary openMoreFilters(){
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].click()", moreFilters);
         return this;
     }
 

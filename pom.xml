@@ -20,6 +20,7 @@
         <log4j.version>2.13.0</log4j.version>
         <reportportal.version>4.0.1</reportportal.version>
         <healenium.version>2.0.5</healenium.version>
+        <allure.version>2.13.3</allure.version>
         <browser>CHROME</browser>
     </properties>
 
@@ -39,34 +40,26 @@
     </repositories>
 
     <dependencies>
-
-
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>3.141.59</version>
         </dependency>
-
         <dependency>
             <groupId>com.epam.healenium</groupId>
             <artifactId>healenium-web</artifactId>
             <version>${healenium.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.aeonbits.owner</groupId>
             <artifactId>owner-java8</artifactId>
             <version>1.0.10</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>3.7.1</version>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -77,7 +70,6 @@
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -93,8 +85,6 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4j.version}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.aeonbits.owner/owner-java8 -->
         <dependency>
             <groupId>org.aeonbits.owner</groupId>
             <artifactId>owner-java8</artifactId>
@@ -111,10 +101,18 @@
             <artifactId>logger-java-log4j</artifactId>
             <version>${reportportal.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-
-
-
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-commons</artifactId>
+            <version>2.13.2</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -127,7 +125,14 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.10.0</version>
+                <configuration>
+                    <reportVersion>2.4.1</reportVersion>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -153,6 +158,13 @@
 <!--                        <perCoreThreadCount>false</perCoreThreadCount>-->
 <!--                        <threadCount>2</threadCount>-->
                     </systemPropertyVariables>
+                    <systemProperties>
+                        <property>
+                            <name>junit.jupiter.extensions.autodetection.enabled</name>
+                            <value>true</value>
+                        </property>
+                        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                    </systemProperties>
                     <properties>
                         <configurationParameters>
                             junit.jupiter.execution.parallel.enabled = true
@@ -164,7 +176,5 @@
             </plugin>
         </plugins>
     </build>
-
-
 
 </project>
