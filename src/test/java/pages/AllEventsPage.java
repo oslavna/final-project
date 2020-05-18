@@ -47,7 +47,7 @@ public class AllEventsPage extends BasePage {
     @FindBy(css = ".evnt-event-card .evnt-card-wrapper")
     protected List<WebElement> eventList;
 
-    @FindBy(css =".cell-3:nth-child(1) .size-m .evnt-card-wrapper :nth-child(n + 1)")
+    @FindBy(css =".cell-3~ .cell-3+ .cell-3 .evnt-card-wrapper :nth-child(n + 1)")
     protected List<WebElement> cardInfoList;
 
     @FindBy(css=".evnt-cards-container:nth-child(1) .date")
