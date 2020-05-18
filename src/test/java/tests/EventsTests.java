@@ -5,8 +5,11 @@ import io.qameta.allure.Owner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.WebElement;
 import pages.*;
 import helpers.BaseHooks;
+
+
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class EventsTests extends BaseHooks {
 
     @Test @DisplayName("Просмотр предстоящих мероприятий")
     public void checkOfUpcomingEventsCounter() {
+        logger.info(new Object(){}.getClass().getEnclosingMethod().getName() + " test is executing now");
         mainPage.openEventsPage();
         allEventsPage.clickUpcomingEventsButton();
         if (allEventsPage.eventsCardIsPresent())
@@ -48,28 +52,30 @@ public class EventsTests extends BaseHooks {
     }
 
 
-    @Test @DisplayName("Просмотр карточек мероприятий")
+    @Test @DisplayName("Проверка порядка отображаемых блоков с информацией в карточке мероприятия")
     public void checkOfTheOrderOfDisplayedBlocksInEventsCard() {
+        logger.info(new Object(){}.getClass().getEnclosingMethod().getName() + " test is executing now");
         mainPage.openEventsPage();
         allEventsPage.clickUpcomingEventsButton();
-        allEventsPage.blockNamesInEventsCard();
-        List<String> classNamesFromEventCard = new ArrayList<>();
-        for(String name : allEventsPage.blockNamesInEventsCard()) {
-            for (String blockClass : allEventsPage.getExpectedBlockClassNamesInEventsCard()) {
-                if (name.equals(blockClass) || name.equals("location"))  {
-                    logger.info("block class name -  " + name + "; the number in list is " + allEventsPage.blockNamesInEventsCard().indexOf(name));
-                    classNamesFromEventCard.add(name);
-                    System.out.println("block class " + blockClass);
+        List<String> actualClassNamesFromEventCard = new ArrayList<>();
+        for(String name : allEventsPage.blockNamesInEventsCard()){
+            for (String blockClass : allEventsPage.getExpectedBlockClassNamesInEventsCard()){
+                if (name.equals(blockClass)){
+                    actualClassNamesFromEventCard.add(name);
+                    System.out.print(name);
                 }
             }
+            if (actualClassNamesFromEventCard.size() == allEventsPage.getExpectedBlockClassNamesInEventsCard().size()) break;
         }
-        Assertions.assertIterableEquals(allEventsPage.getExpectedBlockClassNamesInEventsCard(),classNamesFromEventCard,
-                "The order is wrong");
+         Assertions.assertIterableEquals(allEventsPage.getExpectedBlockClassNamesInEventsCard(),actualClassNamesFromEventCard,
+                 "Event cards blocks are out of order or some blocks are missing");
     }
+
 
 
     @Test @DisplayName("Валидация дат предстоящих мероприятий")
     public void checkValidityDatesOfEventsOnThisWeek() throws ParseException {
+        logger.info(new Object(){}.getClass().getEnclosingMethod().getName() + " test is executing now");
         mainPage.openEventsPage();
         allEventsPage.clickUpcomingEventsButton();
         if (allEventsPage.thisWeekSectionIsPresent())
