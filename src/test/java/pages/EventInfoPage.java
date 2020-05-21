@@ -10,11 +10,9 @@ import org.openqa.selenium.support.PageFactory;
 public class EventInfoPage extends BasePage{
 
     private static final Logger logger = LogManager.getLogger(EventInfoPage.class);
-    private SelfHealingDriver driver;
 
     public EventInfoPage(SelfHealingDriver driver){
         PageFactory.initElements(driver,this);
-        this.driver = driver;
     }
 
     @FindBy(css = ".attend")

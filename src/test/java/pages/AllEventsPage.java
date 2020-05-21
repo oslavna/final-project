@@ -1,35 +1,22 @@
 package pages;
 
 import com.epam.healenium.SelfHealingDriver;
-import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-
-import java.text.ParseException;
 import java.util.*;
 import java.util.List;
 
 public class AllEventsPage extends BasePage {
 
     private static final Logger logger = LogManager.getLogger(AllEventsPage.class);
-    private SelfHealingDriver driver;
-    private WebDriverWait wait;
-    private Actions actions;
 
 
     public AllEventsPage(SelfHealingDriver driver){
         PageFactory.initElements(driver,this);
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, 10);
-        this.actions = new Actions(driver);
     }
 
     List<String > expectedBlockClassNamesInEventsCard = Arrays.asList
@@ -74,6 +61,26 @@ public class AllEventsPage extends BasePage {
             return false;
         }
     }
+    public List<WebElement> getDatesOfPresentCards(){
+        return datesOfPresentCards;
+    }
+
+    public WebElement getUpcomingEventsButton(){
+        return upcomingEventsButton;
+    }
+    public WebElement getFilterLocation(){
+        return filterLocation;
+    }
+    public WebElement getEventsCard(){
+        return eventsCard;
+    }
+    public WebElement getPastEventsButton(){
+        return pastEventsButton;
+    }
+    public WebElement getLoader(){
+        return loader;
+    }
+
 
     public List<String> blockNamesInEventsCard(){
         ArrayList<String>  list = new ArrayList<>();
@@ -115,55 +122,6 @@ public class AllEventsPage extends BasePage {
 
     public boolean eventsCardIsPresent() {
         return eventsCard.isDisplayed();
-    }
-    @Step("Открытие предстоящих мероприятий")
-    public void clickUpcomingEventsButton(){
-        upcomingEventsButton.click();
-    }
-
-    @Step("Открытие карточки мероприятия")
-    public void clickEventsCard(){
-        eventsCard.click();
-    }
-
-    @Step("Открытие прошедших мероприятий")
-    public AllEventsPage clickPastEventsButton(){
-        pastEventsButton.click();
-        return this;
-    }
-
-    @Step("Открытие фильтрации по параметру \"Location\"")
-    public AllEventsPage openLocationFilters(){
-        actions.moveToElement(filterLocation).click().perform();
-        return this;
-    }
-
-    @Step("Ожидание применения фильтров")
-    public void waitForFiltersApply(){
-        wait.until(ExpectedConditions.stalenessOf(loader));
-    }
-
-    @Step("Выбор страны в фильтре")
-    public AllEventsPage chooseLocationInList(String country) {
-        WebElement element = driver.findElement(By.cssSelector("[data-value='" + country +"']"));
-        JavascriptExecutor executor = (JavascriptExecutor)driver;
-        executor.executeScript("arguments[0].click()", element);
-        return this;
-    }
-
-    @Step("Проверка, что дата в пределах этой недели")
-    public boolean checkDateOnValidity(String textDate) throws ParseException {
-        return datesHelper.checkDate(textDate);
-    }
-
-    @Step("Проверка, что дата прошедшая")
-    public boolean datesIsBeforeToday() throws ParseException {
-        for (WebElement webElement : datesOfPresentCards) {
-            String date = webElement.getText();
-            if (datesHelper.dateIsBeforeToday(date))
-                return true;
-        }
-        return false;
     }
 
 }

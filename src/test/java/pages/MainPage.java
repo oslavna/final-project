@@ -1,7 +1,6 @@
 package pages;
 
 import com.epam.healenium.SelfHealingDriver;
-import io.qameta.allure.Step;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,14 +22,12 @@ public class MainPage extends BasePage {
     protected WebElement talksLibTabButton;
 
 
-    @Step("Открытие страницы мероприятий")
     public void openEventsPage(){
         driver.get(baseUrl);
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", eventsTabButton);
     }
 
-    @Step("Открытие страницы докладов")
     public void openTalksLibPage(){
         driver.get(baseUrl);
         JavascriptExecutor executor = (JavascriptExecutor)driver;
