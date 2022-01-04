@@ -17,7 +17,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <log4j-core.version>2.13.1</log4j-core.version>
         <junit.version>5.6.0</junit.version>
-        <log4j.version>2.13.0</log4j.version>
+        <log4j.version>2.17.1</log4j.version>
         <reportportal.version>4.0.1</reportportal.version>
         <healenium.version>2.0.5</healenium.version>
         <allure.version>2.13.3</allure.version>
